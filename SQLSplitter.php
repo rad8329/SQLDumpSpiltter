@@ -25,6 +25,19 @@ class SQLSplitter
 
     private const START_GRIP = '/^-- Table structure for table `(.*)`/i';
 
+    private const SESSION_VARIABLES = <<<SQL
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+SQL;
+
     /**
      * Splitter constructor.
      *
@@ -140,6 +153,7 @@ class SQLSplitter
     {
         $filename = $this->current_table . '.sql';
         $this->chunk_fp = fopen($this->output_dir . $filename, 'w');
+        fwrite($this->chunk_fp, self::SESSION_VARIABLES . PHP_EOL);
         print "Parsing table: $this->current_table\n";
     }
 
